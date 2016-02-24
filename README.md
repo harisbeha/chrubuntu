@@ -1,5 +1,6 @@
 # chrubuntu
 Configs to flash BIOS, install ubuntu, and provision dev environment on Chromebook (from USB)
+
   Purpose: Crouton is a bit too slow for productive development, these configs allow for a quick provisioning of a suitable dev box
 
   Remove hardware screw to disable write protection
