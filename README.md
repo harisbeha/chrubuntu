@@ -7,7 +7,7 @@ Configs to flash BIOS, install ubuntu, and provision dev environment on Chromebo
     
     cd;
     sudo -E bash seabios-flash.sh 
-    Pray flash doesn't brick the device
+    # Pray flash doesn't brick the device
     sudo crossystem dev_boot_usb=1 dev_boot_legacy=1
     sudo enable_dev_boot
   
@@ -15,11 +15,11 @@ Configs to flash BIOS, install ubuntu, and provision dev environment on Chromebo
   
     bash -c "$(wget -qO - https://raw.github.com/harisbeha/dotfiles/master/dotfiles)"
     
-    ./dotfiles to update
+    # ./dotfiles to update
   
   Provision usb stick raid 
     
-    (ノ͡° ͜ʖ ͡°)ノ︵┻┻
+    # (ノ͡° ͜ʖ ͡°)ノ︵┻┻
     
     apt-get install mdadm
     # for raid 0 
