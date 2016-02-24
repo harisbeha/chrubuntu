@@ -1,8 +1,6 @@
 # chrubuntu
 Configs to flash BIOS, install ubuntu, and provision dev environment on Chromebook (from USB)
 
-Flow:
-  
   Remove hardware screw to disable write protection
   
   Flash bios to enable SeaBios legacy
