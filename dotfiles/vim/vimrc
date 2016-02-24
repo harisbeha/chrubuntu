@@ -1,0 +1,778 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                          VIMrc File
+
+"    This file is ever changing and ever growing.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Use Vundle to manage the vim plugins
+" https://github.com/gmarik/Vundle.vim
+
+set nocompatible               " Don't make vim vi-compatibile
+filetype off                   " Disable file type detection
+                               " (required by Vundle)
+
+" Set the runtime path to include Vundle
+set runtimepath+=~/.vim/plugins/Vundle.vim
+
+" place holder for installing bundles
+let noBundles=1
+
+
+" Taken from fisadev/fisa-vim-config
+" used to setup vundle for first time installs
+let vundle_readme=expand('~/.vim/plugins/Vundle.vim/README.md')
+if !filereadable(vundle_readme)
+    echo "Installing Vundle..."
+    echo ""
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/plugins/Vundle.vim
+    let noBundles=0
+endif
+" Set the runtime path to include Vundle
+
+" Initialize Vundle and specify the path
+" where the plugins should be installed
+call vundle#begin('~/.vim/plugins')
+    " Let Vundle manage Vundle (this is important!)
+    Plugin 'gmarik/Vundle.vim'
+    Plugin 'jnurmine/Zenburn'
+    Plugin 'bling/vim-airline'
+    Plugin 'airblade/vim-gitgutter'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'scrooloose/nerdtree'
+    Plugin 'scrooloose/syntastic'
+    Plugin 'tomtom/tcomment_vim'
+    Plugin 'tpope/vim-commentary'
+    Plugin 'tpope/vim-fugitive'
+    Plugin 'tpope/vim-repeat'
+    Plugin 'tpope/vim-surround'
+    Plugin 'davidhalter/jedi-vim'
+    Plugin 'kien/ctrlp.vim'
+    Plugin 'sjl/gundo.vim'
+    Plugin 'Raimondi/delimitMate'
+    Plugin 'vim-scripts/TaskList.vim'
+    Plugin 'majutsushi/tagbar'
+    Plugin 'christoomey/vim-tmux-navigator'
+call vundle#end()
+
+if noBundles == 0
+    let noBundles=1
+    echo "Installing Bundles, Please ignore key map error messages"
+    echo ""
+    :BundleInstall
+endif
+
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => VIM user interface
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax on                      " Enable syntax highlighting
+
+if has('autocmd')
+    filetype plugin indent on
+    "           │     │    └──── Enable file type detection
+    "           │     └───────── Enable loading of indent file
+    "           └─────────────── Enable loading of plugin files
+endif
+
+set t_Co=256                   " Enable full-color support
+set t_ut=                      " Fix issue with background splash
+
+
+set autoindent                 " Copy indent to the new line
+
+set background=dark            " Use colors that look good
+                               " on a dark background
+
+set backspace=indent           " ┐
+set backspace+=eol             " │ Allow `backspace`
+set backspace+=start           " ┘ in insert mode
+
+set backupdir=~/.vim/backups   " Set directory for backup files
+
+set backupskip=/tmp/*          " ┐ Don't create backups
+set backupskip+=/private/tmp/* " ┘ for certain files
+
+set clipboard=unnamed          " ┐
+                               " │ Use the system clipboard
+if has('unnamedplus')          " │ as the default register
+    set clipboard+=unnamedplus " │
+endif                          " ┘
+
+set cpoptions+=$               " When making a change, don't
+                               " redisplay the line, and instead,
+                               " put a `$` sign at the end of
+                               " the changed text
+
+set colorcolumn=73             " Highlight certain column(s)
+set cursorline                 " Highlight the current line
+set directory=~/.vim/swaps     " Set directory for swap files
+set encoding=utf8 nobomb       " Use UTF-8 without BOM
+set fileencoding=utf8
+set history=5000               " Increase command line history
+set hlsearch                   " Enable search highlighting
+set ignorecase                 " Ignore case in search patterns
+
+set incsearch                  " Highlight search pattern as
+                               " it is being typed
+
+set laststatus=2               " Always show the status line
+
+set listchars=tab:▸\           " ┐
+set listchars+=trail:·         " │ Use custom symbols to
+set listchars+=eol:↴           " │ represent invisible characters
+set listchars+=nbsp:_          " ┘
+
+set magic                      " Enable extended regexp
+set mousehide                  " Hide mouse pointer while typing
+set noerrorbells               " Disable error bells
+
+set nojoinspaces               " When using the join command,
+                               " only insert a single space
+                               " after a `.`, `?`, or `!`
+
+set nostartofline              " Kept the cursor on the same column
+set number                     " Show line number
+
+set numberwidth=5              " Increase the minimal number of
+                               " columns used for the `line number`
+
+set report=0                   " Report the number of lines changed
+set ruler                      " Show cursor position
+
+set scrolloff=5                " When scrolling, keep the cursor
+                               " 5 lines below the top and 5 lines
+                               " above the bottom of the screen
+
+set shortmess=aAItW            " Avoid all the hit-enter prompts
+set showcmd                    " Show the command being typed
+set showmode                   " Show current mode
+set spelllang=en_us            " Set the spellchecking language
+
+set smartcase                  " Override `ignorecase` option
+                               " if the search pattern contains
+                               " uppercase characters
+
+set synmaxcol=2500             " Limit syntax highlighting (this
+                               " avoids the very slow redrawing
+                               " when files contain long lines)
+
+set tabstop=4                  " ┐
+set softtabstop=4              " │ Set global <TAB> settings
+set shiftwidth=4               " │ http://vimcasts.org/e/2
+set expandtab                  " ┘
+
+set ttyfast                    " Enable fast terminal connection
+set undodir=~/.vim/undos       " Set directory for undo files
+set undofile                   " Automatically save undo history
+set virtualedit=all            " Allow cursor to be anywhere
+
+set visualbell                 " ┐
+set noerrorbells               " │ Disable beeping and window flashing
+set t_vb=                      " ┘ http://vim.wikia.com/wiki/Disable_beeping
+
+set wildmenu                   " Enable enhanced command-line
+                               " completion (by hitting <TAB> in
+                               " command mode, Vim will show the
+                               " possible matches just above the
+                               " command line with the first
+                               " match highlighted)
+
+set winminheight=0             " Allow windows to be squashed
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Enable syntax highlighting
+syntax enable
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+" Use custom color scheme
+colorscheme zenburn
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Visual mode related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Visual mode pressing * or # searches for the current selection
+" Super useful! From an idea by Michael Naumann
+vnoremap <silent> * :call VisualSelection('f')<CR>
+vnoremap <silent> # :call VisualSelection('b')<CR>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Moving around, tabs, windows and buffers
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" More natural opening of buffers
+set splitbelow
+set splitright
+
+" Treat long lines as break lines (useful when moving around in them)
+map j gj
+map k gk
+
+" jump to start and end of line while staying in home row
+noremap H ^
+noremap L $
+
+" Use arrow keys to switch buffers
+noremap <left> :bp<CR>
+noremap <right> :bn<CR>
+
+" disable up and down arrow keys
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+
+" Close the current buffer
+map <silent>bd :Bclose<cr>
+
+" Close all the buffers
+map <silent>cb :%bd<cr>
+
+" Switch CWD to the directory of the open buffer
+map <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Editing mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
+map <space> /
+map <c-space> ?
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Fast saving
+nmap <leader>w :w!<cr>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Use a different mapleader (default is '\')
+let mapleader = ','
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,* ] Search and replace the word under the cursor
+nmap <leader>* :%s/\<<C-r><C-w>\>//<Left>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,cc] Toggle code comments
+" https://github.com/tomtom/tcomment_vim
+map <leader>cc :TComment<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,cl] Ctags
+
+nnoremap <silent> <Leader>cl :TagbarToggle<CR>
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,cr] Calculate result
+" http://vimcasts.org/e/56
+nmap <leader>cr 0yt=A<C-r>=<C-r>"<CR><Esc>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,cs] Clear search
+map <leader>cs <Esc>:noh<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+" [,l ] Toggle `set list`
+nmap <leader>l :set list!<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,n ] Toggle `set relativenumber`
+nmap <leader>cn :call ToggleRelativeLineNumbers()<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,sw] Strip trailing whitespace
+nmap <leader>sw :call StripTrailingWhitespaces()<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,ti] Toggle indent
+nmap <leader>ti <Plug>IndentGuidesToggle
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,tl] Toggle show limits
+nmap <leader>tl :call ToggleLimits()<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,tn] Toggle NERDTree
+map <leader>tn :NERDTreeToggle<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,v] Make the opening of the `.vimrc` file easier
+nmap <leader>v :vsp $MYVIMRC<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,W] Sudo write
+map <leader>W :w !sudo tee %<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,p] ipdb toggle
+nnoremap <leader>p oimport pudb;pudb.set_trace()^[
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+"Make movement easier
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,q] Quickly open a buffer for scripbble
+map <leader>q :e ~/buffer<cr>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,pp] Toggle paste mode on and off
+map <leader>pp :setlocal paste!<cr>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,ce] to toggle line/column highlighting
+noremap <leader>ce  :set cursorline! cursorcolumn!<cr>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,c]Mapping for ctrlp
+let cwd = getcwd()
+map <leader>c  :CtrlP cwd<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,tl] Pull up task list for file:w
+map <leader>tl :TaskList<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,gt] Map gundo
+map <leader>gt :GundoToggle<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [ctrl+s] Make ctrl+s save like in textpad
+inoremap <c-S> <ESC>:w<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Better navigating through omnicomplete option list
+inoremap <expr> U ((pumvisible())?("\<C-n>"):("U"))
+inoremap <expr> I ((pumvisible())?("\<C-p>"):("I"))
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,nm] Toggle show numbers
+nnoremap <silent>nm :call NumberToggle()<cr>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,f] buffer find mode
+map <leader>f :CtrlPBuffer<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [s] show syntastc errors
+map <silent> <Leader>e :Errors<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" [,s] Toggle syntastkc mode
+map <Leader>s :SyntasticToggleMode<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vimgrep searching and cope displaying
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" [gv]  When you press gv you vimgrep after the selected text
+vnoremap <silent> gv :call VisualSelection('gv')<CR>
+
+" [,g] Open vimgrep and put the cursor in the right position
+map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+
+" [,space] Vimgreps in the current file
+map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
+
+" When you press <leader>r you can search and replace the selected text
+vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
+
+" Do :help cope if you are unsure what cope is. It's super useful!
+"
+" When you search with vimgrep, display your results in cope by doing:
+"   <leader>gd
+"
+" To go to the next search result do:
+"   <leader>gn
+"
+" To go to the previous search results do:
+"   <leader>gp
+"
+map <leader>gd :botright cope<cr>
+map <leader>go  ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+map <leader>gn :cn<cr>
+map <leader>gp :cp<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pressing ,ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+
+" Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"Gundo Settings
+let g:gundo_width = 60
+let g:gundo_preview_height = 10
+let g:gundo_right = 1
+let g:gundo_preview_bottom = 1
+let g:gundo_auto_preview = 1
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+"Nerdtree
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
+
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+"Jedi-Vim
+let g:jedi#completions_enabled = 1
+let g:jedi#popup_select_first = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#show_call_signatures = 1
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Indent Guides
+
+" Set custom indent colors
+" https://github.com/nathanaelkane/vim-indent-guides#setting-custom-indent-colors
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=13  guibg=#d33682
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=237 guibg=#073642
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Vim-Airline
+
+" let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_theme='zenburn'
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Syntastic
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
+" ignore some annoying pep things
+let g:syntastic_python_checker_args = '--ignore="E225,E501,E302,E261,E701,E241,E126,E127,E128,W80"'
+" use flake8
+let g:syntastic_python_checkers = ['flake8']
+" On by default, turn it off for html
+" let g:syntastic_mode_map = { 'mode': 'active',
+"     \ 'active_filetypes': [],
+"     \ 'passive_filetypes': ['html'] }
+" Better :sign interface symbols
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '!'
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" " => Status Line
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Terminal types:
+"
+"   1) term  (normal terminals, e.g.: vt100, xterm)
+"   2) cterm (color terminals, e.g.: MS-DOS console, color-xterm)
+"   3) gui   (GUIs)
+
+highlight ColorColumn
+    \ term=NONE
+    \ cterm=NONE  ctermbg=237    ctermfg=NONE
+    \ gui=NONE    guibg=#073642  guifg=NONE
+
+highlight CursorLineNr
+    \ term=bold
+    \ cterm=bold  ctermbg=NONE   ctermfg=178
+    \ gui=bold    guibg=#073642  guifg=Orange
+
+highlight LineNr
+    \ term=NONE
+    \ cterm=NONE  ctermfg=241    ctermbg=NONE
+    \ gui=NONE    guifg=#839497  guibg=#073642
+
+highlight User1
+    \ term=NONE
+    \ cterm=NONE  ctermbg=237    ctermfg=Grey
+    \ gui=NONE    guibg=#073642  guifg=#839496
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function! VisualSelection(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Returns true if paste mode is enabled
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    en
+    return ''
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+   let l:currentBufNum = bufnr("%")
+   let l:alternateBufNum = bufnr("#")
+
+   if buflisted(l:alternateBufNum)
+     buffer #
+   else
+     bnext
+   endif
+
+   if bufnr("%") == l:currentBufNum
+     new
+   endif
+
+   if buflisted(l:currentBufNum)
+     execute("bdelete! ".l:currentBufNum)
+   endif
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function! GetGitBranchName()
+
+    let branchName = ""
+
+    if exists('g:loaded_fugitive')
+        let branchName = '[' . fugitive#head() . ']'
+    endif
+
+    return branchName
+
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function! StripTrailingWhitespaces()
+
+    " Save last search and cursor position
+    let searchHistory = @/
+    let cursorLine = line('.')
+    let cursorColumn = col('.')
+
+    " Strip trailing whitespaces
+    %s/\s\+$//e
+
+    " Restore previous search history and cursor position
+    let @/ = searchHistory
+    call cursor(cursorLine, cursorColumn)
+
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function! ToggleLimits()
+
+    " [51,73]
+    "   - git commit message
+    "     http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+    " [81]
+    "   - general use
+
+    if ( &colorcolumn == '73' )
+        set colorcolumn+=51,81
+    else
+        set colorcolumn-=51,81
+    endif
+
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function! ToggleRelativeLineNumbers()
+    if ( &relativenumber == 1 )
+        set number
+    else
+        set relativenumber
+    endif
+endfunction
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+" Delete trailing white space on save, useful for Python and CoffeeScript ;)
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Automatic Commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWrite *.coffee :call DeleteTrailingWS()
+
+
+" automatically reload vimrc when it's saved
+au BufWritePost .vimrc so ~/.vimrc
+"show git info in split
+autocmd FileType gitcommit DiffGitCached | wincmd p
+
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+" Remember info about open buffers on close
+set viminfo^=%
+
+if has('autocmd')
+
+    " Autocommand Groups
+    " http://learnvimscriptthehardway.stevelosh.com/chapters/14.html
+
+    " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    " Automatically reload the `~/.vimrc` and `~/.gvimrc`
+    " files whenever their content is changed.
+
+    augroup auto_reload_vim_configs
+        autocmd!
+        autocmd BufWritePost vimrc source $MYVIMRC
+        if has('gui_running')
+            autocmd BufWritePost gvimrc source $MYGVIMRC
+        endif
+    augroup END
+
+    " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    " Automatically reload the configurations from the
+    " `~/.vimrc` and `~/.gvimrc` files whenever they are changed
+
+    augroup auto_reload_vim_configs
+        autocmd!
+        autocmd BufWritePost vimrc source $MYVIMRC
+        if has('gui_running')
+            autocmd BufWritePost gvimrc source $MYGVIMRC
+        endif
+    augroup END
+
+    " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    " Use relative line numbers
+    " http://jeffkreeftmeijer.com/2012/relative-line-numbers-in-vim-for-super-fast-movement/
+
+    augroup relative_line_numbers
+        autocmd!
+        " Automatically switch to absolute line numbers when vim loses focus
+        autocmd FocusLost * :set number
+        " Automatically switch to relative line numbers when vim gains focus
+        autocmd FocusGained * :set relativenumber
+        " Automatically switch to absolute line numbers when vim is in insert mode
+        autocmd InsertEnter * :set number
+        " Automatically switch to relative line numbers when vim is in normal mode
+        autocmd InsertLeave * :set relativenumber
+    augroup END
+
+    " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    " Automatically strip the trailing whitespaces when files are saved
+
+    augroup strip_trailing_whitespaces
+        autocmd!
+        autocmd BufWritePre * :call StripTrailingWhitespaces()
+    augroup END
+
+endif
+
+
+" Add the virtualenv's site-packages to vim path
+py << EOF
+import os.path
+import sys
+import vim
+if 'VIRTUAL_ENV' in os.environ:
+    project_base_dir = os.environ['VIRTUAL_ENV']
+    sys.path.insert(0, project_base_dir)
+    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+    execfile(activate_this, dict(__file__=activate_this))
+EOF
